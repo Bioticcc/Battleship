@@ -1,0 +1,12 @@
+﻿  func.c
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\func.c(69,3): warning C4013: 'system' undefined; assuming extern returning int
+  main.c
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\main.c(7,13): warning C4047: 'function': 'char (*)[10]' differs in levels of indirection from 'char (*)[10][10]'
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\main.c(7,13): warning C4024: 'make_board': different types for formal and actual parameter 1
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\main.c(7,23): warning C4047: 'function': 'char (*)[10]' differs in levels of indirection from 'char (*)[10][10]'
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\main.c(7,23): warning C4024: 'make_board': different types for formal and actual parameter 2
+  Generating Code...
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\func.c(91,1): warning C4716: 'place_ships': must return a value
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\func.c(72,1): warning C4715: 'welcome': not all control paths return a value
+C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\func.c(48,1): warning C4716: 'make_board': must return a value
+  PA6 - Battleship.vcxproj -> C:\Users\jeezu\Desktop\CS\CptS-LABS\PA6 - Battleship\x64\Debug\PA6 - Battleship.exe
