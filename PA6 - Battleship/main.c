@@ -4,7 +4,7 @@ char cpu[10][10];
 
 int main(void) {
 	welcome();
-	make_board(&player1, &cpu);
-
+	make_board(player1, cpu);
+	place_ships(player1, cpu);
 
 }
