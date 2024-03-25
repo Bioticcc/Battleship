@@ -1,7 +1,7 @@
 #include "Header.h"
 
 //makes empty board and returns it.
-char make_board(char player[10][10], char cpu[10][10]) {
+char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10]) {
 	printf("\nBOARD CREATED\n");
 	printf(" -------------CPU-------------");
 	char board[10][10] = {
@@ -20,6 +20,13 @@ char make_board(char player[10][10], char cpu[10][10]) {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			cpu[i][j] = board[i][j];
+		}
+	}
+
+	//copying board to cpudisplay
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			cpudisplay[i][j] = board[i][j];
 		}
 	}
 
@@ -128,24 +135,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 		{0,0},
 		{0,0}
 	};
-	int illegalcoords[16][2] = {
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0},
-		{0,0}
-	};
+	
 	//sleep(500);
 	int R = 0;
 	int a=0;
@@ -217,8 +207,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[i][x] = 'o';
 				carrier[row][0] = x;
 				carrier[row][1] = i;
-				illegalcoords[R][0] = x;
-				illegalcoords[R][1] = i;
+				
 				R++;
 				row++;
 			}
@@ -233,8 +222,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y][i] = 'o';
 				carrier[row][0] = i;
 				carrier[row][1] = y;
-				illegalcoords[R][0] = i;
-				illegalcoords[R][1] = y;
+				
 				R++;
 				row++;
 			}
@@ -288,8 +276,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[i][x] = 'o';
 				battle[row][0] = x;
 				battle[row][1] = i;
-				illegalcoords[R][0] = x;
-				illegalcoords[R][1] = i;
+				
 				R++;
 				row++;
 			}
@@ -304,8 +291,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y][i] = 'o';
 				battle[row][0] = i;
 				battle[row][1] = y;
-				illegalcoords[R][0] = i;
-				illegalcoords[R][1] = y;
+				
 				R++;
 				row++;
 			}
@@ -356,8 +342,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[i][x] = 'o';
 				cruiser[row][0] = x;
 				cruiser[row][1] = i;
-				illegalcoords[R][0] = x;
-				illegalcoords[R][1] = i;
+				
 				R++;
 				row++;
 			}
@@ -372,8 +357,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y][i] = 'o';
 				cruiser[row][0] = i;
 				cruiser[row][1] = y;
-				illegalcoords[R][0] = i;
-				illegalcoords[R][1] = y;
+				
 				R++;
 				row++;
 			}
@@ -423,8 +407,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[i][x] = 'o';
 				sub[row][0] = x;
 				sub[row][1] = i;
-				illegalcoords[R][0] = x;
-				illegalcoords[R][1] = i;
+				
 				R++;
 				row++;
 			}
@@ -439,8 +422,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y][i] = 'o';
 				sub[row][0] = i;
 				sub[row][1] = y;
-				illegalcoords[R][0] = i;
-				illegalcoords[R][1] = y;
+				
 				R++;
 			}
 			player[y][x] = 'U';
@@ -489,8 +471,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[i][x] = 'o';
 				destroyer[row][0] = x;
 				destroyer[row][1] = i;
-				illegalcoords[R][0] = x;
-				illegalcoords[R][1] = i;
+				
 				R++;
 			}
 			player[y][x] = '<';
@@ -504,8 +485,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y][i] = 'o';
 				destroyer[row][0] = i;
 				destroyer[row][1] = y;
-				illegalcoords[R][0] = i;
-				illegalcoords[R][1] = y;
+				
 				R++;
 			}
 			player[y][x] = '<';
@@ -540,8 +520,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[y][i] = 'o';
 					carrier[row][0] = i;
 					carrier[row][1] = y; row++;
-					illegalcoords[R][0] = i;
-					illegalcoords[R][1] = y;
+					
 					R++;
 				}
 				player[y][x] = '<';
@@ -555,8 +534,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[i][x] = 'o';
 					carrier[row][0] = x;
 					carrier[row][1] = i; row++;
-					illegalcoords[R][0] = x;
-					illegalcoords[R][1] = i;
+					
 					R++;
 				}
 				player[y][x] = '<';
@@ -583,8 +561,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[y2][i] = 'o';
 					battle[row][0] = i;
 					battle[row][1] = y2; row++;
-					illegalcoords[R][0] = i;
-					illegalcoords[R][1] = y2;
+					
 					R++;
 				}
 				player[y2][x2] = '<';
@@ -598,8 +575,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[i][x2] = 'o';
 					battle[row][0] = x2;
 					battle[row][1] = i; row++;
-					illegalcoords[R][0] = x2;
-					illegalcoords[R][1] = i;
+					
 					R++;
 				}
 				player[y2][x2] = '<';
@@ -626,8 +602,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[y4][i] = 'o';
 					cruiser[row][0] = i;
 					cruiser[row][1] = y4; row++;
-					illegalcoords[R][0] = i;
-					illegalcoords[R][1] = y4;
+					
 					R++;
 				}
 				player[y4][x4] = '<';
@@ -641,8 +616,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[i][x4] = 'o';
 					cruiser[row][0] = x4;
 					cruiser[row][1] = i; row++;
-					illegalcoords[R][0] = x4;
-					illegalcoords[R][1] = i;
+					
 					R++;
 
 				}
@@ -669,8 +643,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[y6][i] = 'o';
 					sub[row][0] = i;
 					sub[row][1] = y6;
-					illegalcoords[R][0] = i;
-					illegalcoords[R][1] = y6;
+					
 					R++;
 					row++;
 				}
@@ -685,8 +658,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[i][x6] = 'o';
 					sub[row][0] = x6;
 					sub[row][1] = i;
-					illegalcoords[R][0] = x6;
-					illegalcoords[R][1] = i;
+					
 					R++;
 					row++;
 				}
@@ -714,8 +686,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[y8][i] = 'o';
 					destroyer[row][0] = i;
 					destroyer[row][1] = y8;
-					illegalcoords[R][0] = i;
-					illegalcoords[R][1] = y8;
+					
 					R++;
 					row++;
 				}
@@ -730,8 +701,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 					player[i][x8] = 'o';
 					destroyer[row][0] = x8;
 					destroyer[row][1] = i;
-					illegalcoords[R][0] = x8;
-					illegalcoords[R][1] = i;
+				
 					R++;
 					row++;
 				}
@@ -739,31 +709,323 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 				player[y9][x9] = '>';
 
 			}
-			int n = 0;
+			
 			for (int i = 1; i < 10; i++) {
-				for (int j = 1; j < 10; i++) {
-					if (player[i][j] != '-') { shiptotalmass++; break; }
-					n++;
-					printf("test%d %d", n, shiptotalmass);
-					printf("board: %c\n", player[i][j]);
+				for (int j = 1; j < 10; j++) {
+					if (player[i][j] != '-') { shiptotalmass++; }
 				}
-				if (shiptotalmass == 17) { b = 0; printf("test1");
+			}
+
+			if (shiptotalmass == 17) { b = 0; }
+			if (shiptotalmass != 17) {
+				for (int i = 1; i < 10; i++) {
+					for (int j = 1; j < 10; j++) {
+						player[i][j] = '-';
+
+					}
 
 				}
 			}
+			
 		}
 		system("cls");
+		printf("Ships strategically placed, captain!\n");
 		show_board(player);
 		//testing - displaying coordinates of all ships, for now just carrier
-		for (int i = 0; i < 16; i++) {
-			printf("\n(%d, %d)", illegalcoords[i][0], illegalcoords[i][1]);
-		}
-		printf("\nContinue?");
-		int testing = scanf("%d");
-		
+		system("pause");
 	}
 
 }
+
+char place_CPU_ships(char cpu[10][10]) {
+
+	//ships! except these ones are the CPU's ships
+	int CPUcarrier[5][2] = { //alright, so the idea here is saving the coordinates that each ship is at. like the full ship idk. Id imagine this will come in handy but at this point its between the code and god
+		{0,0},
+		{0,0},
+		{0,0},
+		{0,0},
+		{0,0}
+	};
+
+	int CPUbattle[4][2] = {
+		{0,0},
+		{0,0},
+		{0,0},
+		{0,0}
+	};
+
+	int CPUcruiser[3][2] = {
+		{0,0},
+		{0,0},
+		{0,0},
+	};
+
+	int CPUsub[3][2] = {
+		{0,0},
+		{0,0},
+		{0,0}
+	};
+
+	int CPUdestroyer[2][2] = {
+		{0,0},
+		{0,0}
+	};
+	int b = 1;
+	while (b) {
+		int shiptotalmass = 0;
+
+		int R = 0;
+		//AUTOMATIC DEPLOY
+		unsigned int random = time(0);
+		srand(random);
+		int VH = rand() % 2 + 1; //determines if the ship will be placed horizontally or vertically
+
+		//randomly places carrier
+		int row = 0;
+		int x = rand() % 5 + 1;
+		int y = rand() % 5 + 1;
+		int y1 = 0;
+		int x1 = 0;
+		if (VH == 1) { //horizontal
+			x1 = (x + 4);
+			y1 = y;
+			for (int i = x; i < x1 + 1; i++) {
+				cpu[y][i] = 'o';
+				CPUcarrier[row][0] = i;
+				CPUcarrier[row][1] = y; row++;
+
+				R++;
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x1 = x;
+			y1 = y + 4;
+			for (int i = y; i < y1 + 1; i++) {
+				cpu[i][x] = 'o';
+				CPUcarrier[row][0] = x;
+				CPUcarrier[row][1] = i; row++;
+
+				R++;
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+		//randomly places battleship
+		row = 0;
+		VH = rand() % 2 + 1;
+		int x2 = rand() % 6 + 1;
+		int y2 = rand() % 6 + 1;
+		int x3 = 0;
+		int y3 = 0;
+		while (x2 == x || x2 == x1 || y2 == y || y2 == y1) { // should ensure bow and aft dont get placed on the same tiles
+			x2 = rand() % 6 + 1;
+			y2 = rand() % 6 + 1;
+		}
+
+
+		if (VH == 1) { //horizontal
+			x3 = (x2 + 3);
+			y3 = y2;
+			for (int i = x2; i < x3 + 1; i++) {
+				cpu[y2][i] = 'o';
+				CPUbattle[row][0] = i;
+				CPUbattle[row][1] = y2; row++;
+
+				R++;
+			}
+			cpu[y2][x2] = '<';
+			cpu[y3][x3] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x3 = x2;
+			y3 = y2 + 3;
+			for (int i = y2; i < y3 + 1; i++) {
+				cpu[i][x2] = 'o';
+				CPUbattle[row][0] = x2;
+				CPUbattle[row][1] = i; row++;
+
+				R++;
+			}
+			cpu[y2][x2] = '<';
+			cpu[y3][x3] = '>';
+
+		}
+
+		//placing cruiser
+		row = 0;
+		VH = rand() % 2 + 1;
+		int x4 = rand() % 4 + 1;
+		int y4 = rand() % 4 + 1;
+		int x5 = 0;
+		int y5 = 0;
+		while (x4 == x || x4 == x1 || x4 == x2 || x4 == x3 || y4 == y || y4 == y1 || y4 == y2 || y4 == y3) { // should ensure it doesnt get placed on the same tiles
+			x4 = rand() % 6 + 1;
+			y4 = rand() % 6 + 1;
+		}
+
+		if (VH == 1) { //horizontal
+			x5 = (x4 + 2);
+			y5 = y4;
+			for (int i = x4; i < x5 + 1; i++) {
+				cpu[y4][i] = 'o';
+				CPUcruiser[row][0] = i;
+				CPUcruiser[row][1] = y4; row++;
+
+				R++;
+			}
+			cpu[y4][x4] = '<';
+			cpu[y5][x5] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x5 = x4;
+			y5 = y4 + 2;
+			for (int i = y4; i < y5 + 1; i++) {
+				cpu[i][x4] = 'o';
+				CPUcruiser[row][0] = x4;
+				CPUcruiser[row][1] = i; row++;
+
+				R++;
+
+			}
+			cpu[y4][x4] = '<';
+			cpu[y5][x5] = '>';
+
+		}
+		//placing submarine
+		row = 0;
+		VH = rand() % 2 + 1;
+		int x6 = rand() % 4 + 1;
+		int y6 = rand() % 4 + 1;
+		int x7 = 0;
+		int y7 = 0;
+		while (x6 == x || x6 == x1 || x6 == x2 || x6 == x3 || x6 == x4 || x7 == x5 || y6 == y || y6 == y1 || y6 == y2 || y6 == y3 || y6 == y4 || y6 == y5) { // should ensure it doesnt get placed on the same tiles
+			x6 = rand() % 6 + 1;
+			y6 = rand() % 6 + 1;
+		}
+
+		if (VH == 1) { //horizontal
+			x7 = (x6 + 2);
+			y7 = y6;
+			for (int i = x6; i < x7 + 1; i++) {
+				cpu[y6][i] = 'o';
+				CPUsub[row][0] = i;
+				CPUsub[row][1] = y6;
+
+				R++;
+				row++;
+			}
+			cpu[y6][x6] = 'U';
+			cpu[y7][x7] = 'U';
+
+		}
+		else if (VH == 2) { //vertical
+			x7 = x6;
+			y7 = y6 + 2;
+			for (int i = y6; i < y7 + 1; i++) {
+				cpu[i][x6] = 'o';
+				CPUsub[row][0] = x6;
+				CPUsub[row][1] = i;
+
+				R++;
+				row++;
+			}
+			cpu[y6][x6] = 'U';
+			cpu[y7][x7] = 'U';
+
+		}
+
+		//placing destroyer
+		row = 0;
+		VH = rand() % 2 + 1;
+		int x8 = rand() % 8 + 1;
+		int y8 = rand() % 8 + 1;
+		int x9 = 0;
+		int y9 = 0;
+		while (x8 == x || x8 == x1 || x8 == x2 || x8 == x3 || x8 == x4 || x8 == x5 || x8 == x6 || x8 == x7 || y8 == y || y8 == y1 || y8 == y2 || y8 == y3 || y8 == y4 || y8 == y5 || y8 == y6 || y8 == y7) { // should ensure it doesnt get placed on the same tiles
+			x8 = rand() % 6 + 1;
+			y8 = rand() % 6 + 1;
+		}
+
+		if (VH == 1) { //horizontal
+			x9 = (x8 + 1);
+			y9 = y8;
+			for (int i = x8; i < x9 + 1; i++) {
+				cpu[y8][i] = 'o';
+				CPUdestroyer[row][0] = i;
+				CPUdestroyer[row][1] = y8;
+
+				R++;
+				row++;
+			}
+			cpu[y8][x8] = '<';
+			cpu[y9][x9] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x9 = x8;
+			y9 = y8 + 1;
+			for (int i = y8; i < y9 + 1; i++) {
+				cpu[i][x8] = 'o';
+				CPUdestroyer[row][0] = x8;
+				CPUdestroyer[row][1] = i;
+
+				R++;
+				row++;
+			}
+			cpu[y8][x8] = '<';
+			cpu[y9][x9] = '>';
+
+		}
+
+		for (int i = 1; i < 10; i++) {
+			for (int j = 1; j < 10; j++) {
+				if (cpu[i][j] != '-') { shiptotalmass++; }
+			}
+		}
+
+		if (shiptotalmass == 17) { b = 0; }
+		if (shiptotalmass != 17) {
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					cpu[i][j] = '-';
+
+				}
+
+			}
+		}
+	}
+	system("cls");
+	printf("*cpu ships placed*");
+	//testing - displaying coordinates of all ships, for now just carrier
+	system("pause");
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int player_order() {
 	char a = '\0';
@@ -784,12 +1046,14 @@ int player_order() {
 	if (b == 1) {
 		//player first
 		printf("THERE! ON THE HORIZON I CAN SEE THEM! the enemys fleet! unfortunately, they are still heavily obstructed by fog,\nso we wont know where their ships are...\nno matter! FIRE AWAY!\n\n");
+		system("pause");
 		return 1;
 
 	}
 	else if (b == 2) {
 		//cpu first
-		printf("'An explosion rocks the side of your main carrier, alerting you to the enemies prescence.\nARGH! They got us... Thankfully we are still covered by the fog, so they dont know our precise location!\nLet the battle begin.\n\n");
+		printf("An explosion rocks the side of your main carrier, alerting you to the enemies prescence.\nARGH! They got us... Thankfully we are still covered by the fog, so they dont know our precise location!\nLet the battle begin.\n\n");
+		system("pause");
 		return 2;
 	}
 	else {
@@ -798,4 +1062,25 @@ int player_order() {
 	}
 
 
+}
+
+
+int game(char player[10][10], char cpu[10][10], char cpudisplay[10][10], int order) {
+	int x = 0;
+	int y = 0;
+	system("cls");
+	printf("Now that we are in range, lets show those bastards what we can do!");
+	printf("\n---------ENEMY FLEET----------");
+	show_board(cpudisplay);
+	printf("\n---------YOUR FLEET----------");
+	show_board(player);
+	system("pause");
+	if (order == 1) {
+		//player goes first
+		printf("\n---------ENEMY FLEET----------");
+		show_board(cpudisplay);
+		printf("The cannons are ready! Enter the targeted coordinate! (x y): ");
+		scanf("%d%d", &x, &y);
+
+	}
 }

@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "main.c",
               "ToolTip": "C:\\Users\\jeezu\\Documents\\GitHub\\Battleship\\PA6 - Battleship\\main.c",
               "RelativeToolTip": "main.c",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAbAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-20T19:03:09.791Z",
               "IsPinned": true,
@@ -46,7 +46,7 @@
               "RelativeDocumentMoniker": "func.c",
               "ToolTip": "C:\\Users\\jeezu\\Documents\\GitHub\\Battleship\\PA6 - Battleship\\func.c",
               "RelativeToolTip": "func.c",
-              "ViewState": "AQIAANMCAAAAAAAAAAAAAOsCAAApAAAA",
+              "ViewState": "AQIAACEEAAAAAAAAAAAAADsEAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-20T19:03:10.59Z",
               "IsPinned": true,
@@ -60,9 +60,10 @@
               "RelativeDocumentMoniker": "Header.h",
               "ToolTip": "C:\\Users\\jeezu\\Documents\\GitHub\\Battleship\\PA6 - Battleship\\Header.h",
               "RelativeToolTip": "Header.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAA7AAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABoAAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-03-20T19:03:11.713Z"
+              "WhenOpened": "2024-03-20T19:03:11.713Z",
+              "EditorCaption": ""
             }
           ]
         }
