@@ -1,9 +1,15 @@
 ﻿  func.c
 C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(48,2): warning C4047: 'return': 'char' differs in levels of indirection from 'char [10][10]'
-C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(80,3): warning C4013: 'system' undefined; assuming extern returning int
-C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(189,3): warning C4013: 'exit' undefined; assuming extern returning int
-C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(83,1): warning C4715: 'welcome': not all control paths return a value
+C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(763,23): warning C4473: 'scanf' : not enough arguments passed for format string
+  C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(763,23):
+  placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+  C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(763,23):
+  the missing variadic argument 1 is required by format string '%d'
+  
+C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(526,26): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(782,24): warning C4244: 'initializing': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(58,1): warning C4716: 'show_board': must return a value
-C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(192,1): warning C4716: 'place_ships': must return a value
+C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(83,1): warning C4715: 'welcome': not all control paths return a value
 C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(48,1): warning C4172: returning address of local variable or temporary: board
+C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\func.c(767,1): warning C4716: 'place_ships': must return a value
   PA6 - Battleship.vcxproj -> C:\Users\jeezu\Documents\GitHub\Battleship\PA6 - Battleship\x64\Debug\PA6 - Battleship.exe

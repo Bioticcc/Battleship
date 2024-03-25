@@ -13,6 +13,7 @@ Description:
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<time.h>
+#include<stdlib.h>
 
 #endif
 
@@ -22,6 +23,8 @@ int welcome();
 int player_order();
 void display_ships();
 char place_ships(char player[10][10], char cpu[10][10]);
+
+int game(char player[10][10], char cpu[10][10], int order);
 
 
 
