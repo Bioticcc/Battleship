@@ -17,13 +17,13 @@ Description:
 
 #endif
 
-char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10]);
+char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10], char tempboard[10][10], char CPUtempboard[10][10]);
 char show_board(char player[10][10]);
 int welcome();
 int player_order();
 void display_ships();
-char place_ships(char player[10][10], char cpu[10][10]);
-char place_CPU_ships(char cpu[10][10]);
+char place_ships(char player[10][10], char cpu[10][10], char tempboard[10][10]);
+char place_CPU_ships(char cpu[10][10], char CPUtempboard[10][10]);
 int game(char player[10][10], char cpu[10][10], char cpudisplay[10][10], int order);
 
 

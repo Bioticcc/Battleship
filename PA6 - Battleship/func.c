@@ -1,7 +1,7 @@
 #include "Header.h"
 
 //makes empty board and returns it.
-char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10]) {
+char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10], char tempboard[10][10], char CPUtempboard[10][10]) {
 	printf("\nBOARD CREATED\n");
 	printf(" -------------CPU-------------");
 	char board[10][10] = {
@@ -29,6 +29,19 @@ char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10]) 
 			cpudisplay[i][j] = board[i][j];
 		}
 	}
+	//copying board to tempboard
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			tempboard[i][j] = board[i][j];
+		}
+	}
+	//copying board to CPUtempboard
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			CPUtempboard[i][j] = board[i][j];
+		}
+	}
+
 
 	//displaying cpu board
 	for (int i = 0; i < 10; i++) {
@@ -101,7 +114,7 @@ void display_ships() {
 
 
 //allowing players to manually or randomly place ship pieces
-char place_ships(char player[10][10], char cpu[10][10]) {
+char place_ships(char player[10][10], char cpu[10][10], char tempboard[10][10]) {
 
 	//ships!
 	int carrier[5][2] = { //alright, so the idea here is saving the coordinates that each ship is at. like the full ship idk. Id imagine this will come in handy but at this point its between the code and god
@@ -498,30 +511,78 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 	}
 	else if (a == 2) {
 		int b = 1;
-		while (b) {
-			int shiptotalmass = 0;
+		int shiptotalmass = 0;
+		R = 0;
+		//AUTOMATIC DEPLOY
+		unsigned int random = time(0);
+		srand(random);
+		int VH = rand() % 2 + 1; //determines if the ship will be placed horizontally or vertically
 
-			R = 0;
-			//AUTOMATIC DEPLOY
-			unsigned int random = time(0);
-			srand(random);
-			int VH = rand() % 2 + 1; //determines if the ship will be placed horizontally or vertically
+		//randomly places carrier
+		int row = 0;
+		int x = rand() % 5 + 1;
+		int y = rand() % 5 + 1;
+		int y1 = 0;
+		int x1 = 0;
+		
 
-			//randomly places carrier
-			int row = 0;
-			int x = rand() % 5 + 1;
-			int y = rand() % 5 + 1;
-			int y1 = 0;
-			int x1 = 0;
+		if (VH == 1) { //horizontal
+			x1 = (x + 4);
+			y1 = y;
+			for (int i = x; i < x1 + 1; i++) {
+				player[y][i] = 'o';
+				tempboard[y][i] = 'o';
+				carrier[row][0] = i;
+				carrier[row][1] = y; row++;
+
+				R++;
+			}
+			player[y][x] = '<';
+			player[y1][x1] = '>';
+			tempboard[y][x] = '<';
+			tempboard[y1][x1] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x1 = x;
+			y1 = y + 4;
+			for (int i = y; i < y1 + 1; i++) {
+				player[i][x] = 'o';
+				tempboard[i][x] = 'o';
+				carrier[row][0] = x;
+				carrier[row][1] = i; row++;
+
+				R++;
+			}
+			player[y][x] = '<';
+			player[y1][x1] = '>';
+			tempboard[y][x] = '<';
+			tempboard[y1][x1] = '>';
+		}
+		//randomly places battleship
+		int kek = 1;
+		
+		while (kek) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					player[i][j] = tempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+				}
+			}
+			
+			row = 0;
+			VH = rand() % 2 + 1;
+			x = rand() % 6 + 1;
+			y = rand() % 6 + 1;
+			x1 = 0;
+			y1 = 0;
+
 			if (VH == 1) { //horizontal
-				x1 = (x + 4);
+				x1 = (x + 3);
 				y1 = y;
 				for (int i = x; i < x1 + 1; i++) {
 					player[y][i] = 'o';
-					carrier[row][0] = i;
-					carrier[row][1] = y; row++;
-					
-					R++;
+					battle[row][0] = i;
+					battle[row][1] = y; row++;	
 				}
 				player[y][x] = '<';
 				player[y1][x1] = '>';
@@ -529,205 +590,226 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 			}
 			else if (VH == 2) { //vertical
 				x1 = x;
-				y1 = y + 4;
+				y1 = y + 3;
 				for (int i = y; i < y1 + 1; i++) {
 					player[i][x] = 'o';
-					carrier[row][0] = x;
-					carrier[row][1] = i; row++;
-					
+					battle[row][0] = x;
+					battle[row][1] = i; row++;
+
 					R++;
 				}
 				player[y][x] = '<';
 				player[y1][x1] = '>';
 
 			}
-			//randomly places battleship
-			row = 0;
-			VH = rand() % 2 + 1;
-			int x2 = rand() % 6 + 1;
-			int y2 = rand() % 6 + 1;
-			int x3 = 0;
-			int y3 = 0;
-			while (x2 == x || x2 == x1 || y2 == y || y2 == y1) { // should ensure bow and aft dont get placed on the same tiles
-				x2 = rand() % 6 + 1;
-				y2 = rand() % 6 + 1;
-			}
-
-
-			if (VH == 1) { //horizontal
-				x3 = (x2 + 3);
-				y3 = y2;
-				for (int i = x2; i < x3 + 1; i++) {
-					player[y2][i] = 'o';
-					battle[row][0] = i;
-					battle[row][1] = y2; row++;
-					
-					R++;
-				}
-				player[y2][x2] = '<';
-				player[y3][x3] = '>';
-
-			}
-			else if (VH == 2) { //vertical
-				x3 = x2;
-				y3 = y2 + 3;
-				for (int i = y2; i < y3 + 1; i++) {
-					player[i][x2] = 'o';
-					battle[row][0] = x2;
-					battle[row][1] = i; row++;
-					
-					R++;
-				}
-				player[y2][x2] = '<';
-				player[y3][x3] = '>';
-
-			}
-
-			//placing cruiser
-			row = 0;
-			VH = rand() % 2 + 1;
-			int x4 = rand() % 4 + 1;
-			int y4 = rand() % 4 + 1;
-			int x5 = 0;
-			int y5 = 0;
-			while (x4 == x || x4 == x1 || x4 == x2 || x4 == x3 || y4 == y || y4 == y1 || y4 == y2 || y4 == y3) { // should ensure it doesnt get placed on the same tiles
-				x4 = rand() % 6 + 1;
-				y4 = rand() % 6 + 1;
-			}
-
-			if (VH == 1) { //horizontal
-				x5 = (x4 + 2);
-				y5 = y4;
-				for (int i = x4; i < x5 + 1; i++) {
-					player[y4][i] = 'o';
-					cruiser[row][0] = i;
-					cruiser[row][1] = y4; row++;
-					
-					R++;
-				}
-				player[y4][x4] = '<';
-				player[y5][x5] = '>';
-
-			}
-			else if (VH == 2) { //vertical
-				x5 = x4;
-				y5 = y4 + 2;
-				for (int i = y4; i < y5 + 1; i++) {
-					player[i][x4] = 'o';
-					cruiser[row][0] = x4;
-					cruiser[row][1] = i; row++;
-					
-					R++;
-
-				}
-				player[y4][x4] = '<';
-				player[y5][x5] = '>';
-
-			}
-			//placing submarine
-			row = 0;
-			VH = rand() % 2 + 1;
-			int x6 = rand() % 4 + 1;
-			int y6 = rand() % 4 + 1;
-			int x7 = 0;
-			int y7 = 0;
-			while (x6 == x || x6 == x1 || x6 == x2 || x6 == x3 || x6 == x4 || x7 == x5 || y6 == y || y6 == y1 || y6 == y2 || y6 == y3 || y6 == y4 || y6 == y5) { // should ensure it doesnt get placed on the same tiles
-				x6 = rand() % 6 + 1;
-				y6 = rand() % 6 + 1;
-			}
-
-			if (VH == 1) { //horizontal
-				x7 = (x6 + 2);
-				y7 = y6;
-				for (int i = x6; i < x7 + 1; i++) {
-					player[y6][i] = 'o';
-					sub[row][0] = i;
-					sub[row][1] = y6;
-					
-					R++;
-					row++;
-				}
-				player[y6][x6] = 'U';
-				player[y7][x7] = 'U';
-
-			}
-			else if (VH == 2) { //vertical
-				x7 = x6;
-				y7 = y6 + 2;
-				for (int i = y6; i < y7 + 1; i++) {
-					player[i][x6] = 'o';
-					sub[row][0] = x6;
-					sub[row][1] = i;
-					
-					R++;
-					row++;
-				}
-				player[y6][x6] = 'U';
-				player[y7][x7] = 'U';
-
-			}
-
-			//placing destroyer
-			row = 0;
-			VH = rand() % 2 + 1;
-			int x8 = rand() % 8 + 1;
-			int y8 = rand() % 8 + 1;
-			int x9 = 0;
-			int y9 = 0;
-			while (x8 == x || x8 == x1 || x8 == x2 || x8 == x3 || x8 == x4 || x8 == x5 || x8 == x6 || x8 == x7 || y8 == y || y8 == y1 || y8 == y2 || y8 == y3 || y8 == y4 || y8 == y5 || y8 == y6 || y8 == y7) { // should ensure it doesnt get placed on the same tiles
-				x8 = rand() % 6 + 1;
-				y8 = rand() % 6 + 1;
-			}
-
-			if (VH == 1) { //horizontal
-				x9 = (x8 + 1);
-				y9 = y8;
-				for (int i = x8; i < x9 + 1; i++) {
-					player[y8][i] = 'o';
-					destroyer[row][0] = i;
-					destroyer[row][1] = y8;
-					
-					R++;
-					row++;
-				}
-				player[y8][x8] = '<';
-				player[y9][x9] = '>';
-
-			}
-			else if (VH == 2) { //vertical
-				x9 = x8;
-				y9 = y8 + 1;
-				for (int i = y8; i < y9 + 1; i++) {
-					player[i][x8] = 'o';
-					destroyer[row][0] = x8;
-					destroyer[row][1] = i;
-				
-					R++;
-					row++;
-				}
-				player[y8][x8] = '<';
-				player[y9][x9] = '>';
-
-			}
 			
+			shiptotalmass = 0;
 			for (int i = 1; i < 10; i++) {
 				for (int j = 1; j < 10; j++) {
 					if (player[i][j] != '-') { shiptotalmass++; }
 				}
 			}
+			if (shiptotalmass != 9) {
+				kek = 1;
+			}
 
-			if (shiptotalmass == 17) { b = 0; }
-			if (shiptotalmass != 17) {
-				for (int i = 1; i < 10; i++) {
-					for (int j = 1; j < 10; j++) {
-						player[i][j] = '-';
+			else if (shiptotalmass == 9) { kek = 0; }
+		}
 
-					}
-
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				tempboard[i][j] = player[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+		
+		//placing cruiser
+		kek = 1;
+		while (kek) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					player[i][j] = tempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
 				}
 			}
 			
+			row = 0;
+			VH = rand() % 2 + 1;
+			x = rand() % 6 + 1;
+			y = rand() % 6 + 1;
+			x1 = 0;
+			y1 = 0;
+
+			if (VH == 1) { //horizontal
+				x1 = (x + 2);
+				y1 = y;
+				for (int i = x; i < x1 + 1; i++) {
+					player[y][i] = 'o';
+					cruiser[row][0] = i;
+					cruiser[row][1] = y; row++;
+				}
+				player[y][x] = '<';
+				player[y1][x1] = '>';
+
+			}
+			else if (VH == 2) { //vertical
+				x1 = x;
+				y1 = y + 2;
+				for (int i = y; i < y1 + 1; i++) {
+					player[i][x] = 'o';
+					cruiser[row][0] = x;
+					cruiser[row][1] = i; row++;
+
+					R++;
+				}
+				player[y][x] = '<';
+				player[y1][x1] = '>';
+
+			}
+			
+			shiptotalmass = 0;
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					if (player[i][j] != '-') { shiptotalmass++; }
+				}
+			}
+			if (shiptotalmass != 12) {
+				kek = 1;
+			}
+
+			else if (shiptotalmass == 12) { kek = 0; }
 		}
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				tempboard[i][j] = player[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+		
+		//placing submarine
+		kek = 1;
+		while (kek) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					player[i][j] = tempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+				}
+			}
+			
+			row = 0;
+			VH = rand() % 2 + 1;
+			x = rand() % 6 + 1;
+			y = rand() % 6 + 1;
+			x1 = 0;
+			y1 = 0;
+
+			if (VH == 1) { //horizontal
+				x1 = (x + 2);
+				y1 = y;
+				for (int i = x; i < x1 + 1; i++) {
+					player[y][i] = 'o';
+					cruiser[row][0] = i;
+					cruiser[row][1] = y; row++;
+				}
+				player[y][x] = 'U';
+				player[y1][x1] = 'U';
+
+			}
+			else if (VH == 2) { //vertical
+				x1 = x;
+				y1 = y + 2;
+				for (int i = y; i < y1 + 1; i++) {
+					player[i][x] = 'o';
+					cruiser[row][0] = x;
+					cruiser[row][1] = i; row++;
+
+					R++;
+				}
+				player[y][x] = 'U';
+				player[y1][x1] = 'U';
+
+			}
+			
+			shiptotalmass = 0;
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					if (player[i][j] != '-') { shiptotalmass++; }
+				}
+			}
+			if (shiptotalmass != 15) {
+				kek = 1;
+			}
+
+			else if (shiptotalmass == 15) { kek = 0; }
+		}
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				tempboard[i][j] = player[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+		
+		//placing destroyer
+		kek = 1;
+		while (kek) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					player[i][j] = tempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+				}
+			}
+			
+			row = 0;
+			VH = rand() % 2 + 1;
+			x = rand() % 6 + 1;
+			y = rand() % 6 + 1;
+			x1 = 0;
+			y1 = 0;
+
+			if (VH == 1) { //horizontal
+				x1 = (x + 1);
+				y1 = y;
+				for (int i = x; i < x1 + 1; i++) {
+					player[y][i] = 'o';
+					cruiser[row][0] = i;
+					cruiser[row][1] = y; row++;
+				}
+				player[y][x] = '<';
+				player[y1][x1] = '>';
+
+			}
+			else if (VH == 2) { //vertical
+				x1 = x;
+				y1 = y + 1;
+				for (int i = y; i < y1 + 1; i++) {
+					player[i][x] = 'o';
+					cruiser[row][0] = x;
+					cruiser[row][1] = i; row++;
+
+					R++;
+				}
+				player[y][x] = '<';
+				player[y1][x1] = '>';
+
+			}
+			
+			shiptotalmass = 0;
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					if (player[i][j] != '-') { shiptotalmass++; }
+				}
+			}
+			if (shiptotalmass != 17) {
+				kek = 1;
+			}
+
+			else if (shiptotalmass == 17) { kek = 0; }
+		}
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				tempboard[i][j] = player[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+
+			
+
 		system("cls");
 		printf("Ships strategically placed, captain!\n");
 		show_board(player);
@@ -737,7 +819,7 @@ char place_ships(char player[10][10], char cpu[10][10]) {
 
 }
 
-char place_CPU_ships(char cpu[10][10]) {
+char place_CPU_ships(char cpu[10][10], char CPUtempboard[10][10]) {
 
 	//ships! except these ones are the CPU's ships
 	int CPUcarrier[5][2] = { //alright, so the idea here is saving the coordinates that each ship is at. like the full ship idk. Id imagine this will come in handy but at this point its between the code and god
@@ -772,30 +854,78 @@ char place_CPU_ships(char cpu[10][10]) {
 		{0,0}
 	};
 	int b = 1;
-	while (b) {
-		int shiptotalmass = 0;
+	int shiptotalmass = 0;
+	
+	//AUTOMATIC DEPLOY
+	unsigned int random = time(0);
+	srand(random);
+	int VH = rand() % 2 + 1; //determines if the ship will be placed horizontally or vertically
 
-		int R = 0;
-		//AUTOMATIC DEPLOY
-		unsigned int random = time(0);
-		srand(random);
-		int VH = rand() % 2 + 1; //determines if the ship will be placed horizontally or vertically
+	//randomly places carrier
+	int row = 0;
+	int x = rand() % 5 + 1;
+	int y = rand() % 5 + 1;
+	int y1 = 0;
+	int x1 = 0;
 
-		//randomly places carrier
-		int row = 0;
-		int x = rand() % 5 + 1;
-		int y = rand() % 5 + 1;
-		int y1 = 0;
-		int x1 = 0;
+
+	if (VH == 1) { //horizontal
+		x1 = (x + 4);
+		y1 = y;
+		for (int i = x; i < x1 + 1; i++) {
+			cpu[y][i] = 'o';
+			CPUtempboard[y][i] = 'o';
+			CPUcarrier[row][0] = i;
+			CPUcarrier[row][1] = y; row++;
+
+			
+		}
+		cpu[y][x] = '<';
+		cpu[y1][x1] = '>';
+		CPUtempboard[y][x] = '<';
+		CPUtempboard[y1][x1] = '>';
+
+	}
+	else if (VH == 2) { //vertical
+		x1 = x;
+		y1 = y + 4;
+		for (int i = y; i < y1 + 1; i++) {
+			cpu[i][x] = 'o';
+			CPUtempboard[i][x] = 'o';
+			CPUcarrier[row][0] = x;
+			CPUcarrier[row][1] = i; row++;
+
+		
+		}
+		cpu[y][x] = '<';
+		cpu[y1][x1] = '>';
+		CPUtempboard[y][x] = '<';
+		CPUtempboard[y1][x1] = '>';
+	}
+	//randomly places battleship
+	int kek = 1;
+
+	while (kek) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				cpu[i][j] = CPUtempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+
+		row = 0;
+		VH = rand() % 2 + 1;
+		x = rand() % 6 + 1;
+		y = rand() % 6 + 1;
+		x1 = 0;
+		y1 = 0;
+
 		if (VH == 1) { //horizontal
-			x1 = (x + 4);
+			x1 = (x + 3);
 			y1 = y;
 			for (int i = x; i < x1 + 1; i++) {
 				cpu[y][i] = 'o';
-				CPUcarrier[row][0] = i;
-				CPUcarrier[row][1] = y; row++;
-
-				R++;
+				CPUbattle[row][0] = i;
+				CPUbattle[row][1] = y; row++;
 			}
 			cpu[y][x] = '<';
 			cpu[y1][x1] = '>';
@@ -803,228 +933,228 @@ char place_CPU_ships(char cpu[10][10]) {
 		}
 		else if (VH == 2) { //vertical
 			x1 = x;
-			y1 = y + 4;
+			y1 = y + 3;
 			for (int i = y; i < y1 + 1; i++) {
 				cpu[i][x] = 'o';
-				CPUcarrier[row][0] = x;
-				CPUcarrier[row][1] = i; row++;
+				CPUbattle[row][0] = x;
+				CPUbattle[row][1] = i; row++;
 
-				R++;
 			}
 			cpu[y][x] = '<';
 			cpu[y1][x1] = '>';
 
 		}
-		//randomly places battleship
-		row = 0;
-		VH = rand() % 2 + 1;
-		int x2 = rand() % 6 + 1;
-		int y2 = rand() % 6 + 1;
-		int x3 = 0;
-		int y3 = 0;
-		while (x2 == x || x2 == x1 || y2 == y || y2 == y1) { // should ensure bow and aft dont get placed on the same tiles
-			x2 = rand() % 6 + 1;
-			y2 = rand() % 6 + 1;
-		}
 
-
-		if (VH == 1) { //horizontal
-			x3 = (x2 + 3);
-			y3 = y2;
-			for (int i = x2; i < x3 + 1; i++) {
-				cpu[y2][i] = 'o';
-				CPUbattle[row][0] = i;
-				CPUbattle[row][1] = y2; row++;
-
-				R++;
-			}
-			cpu[y2][x2] = '<';
-			cpu[y3][x3] = '>';
-
-		}
-		else if (VH == 2) { //vertical
-			x3 = x2;
-			y3 = y2 + 3;
-			for (int i = y2; i < y3 + 1; i++) {
-				cpu[i][x2] = 'o';
-				CPUbattle[row][0] = x2;
-				CPUbattle[row][1] = i; row++;
-
-				R++;
-			}
-			cpu[y2][x2] = '<';
-			cpu[y3][x3] = '>';
-
-		}
-
-		//placing cruiser
-		row = 0;
-		VH = rand() % 2 + 1;
-		int x4 = rand() % 4 + 1;
-		int y4 = rand() % 4 + 1;
-		int x5 = 0;
-		int y5 = 0;
-		while (x4 == x || x4 == x1 || x4 == x2 || x4 == x3 || y4 == y || y4 == y1 || y4 == y2 || y4 == y3) { // should ensure it doesnt get placed on the same tiles
-			x4 = rand() % 6 + 1;
-			y4 = rand() % 6 + 1;
-		}
-
-		if (VH == 1) { //horizontal
-			x5 = (x4 + 2);
-			y5 = y4;
-			for (int i = x4; i < x5 + 1; i++) {
-				cpu[y4][i] = 'o';
-				CPUcruiser[row][0] = i;
-				CPUcruiser[row][1] = y4; row++;
-
-				R++;
-			}
-			cpu[y4][x4] = '<';
-			cpu[y5][x5] = '>';
-
-		}
-		else if (VH == 2) { //vertical
-			x5 = x4;
-			y5 = y4 + 2;
-			for (int i = y4; i < y5 + 1; i++) {
-				cpu[i][x4] = 'o';
-				CPUcruiser[row][0] = x4;
-				CPUcruiser[row][1] = i; row++;
-
-				R++;
-
-			}
-			cpu[y4][x4] = '<';
-			cpu[y5][x5] = '>';
-
-		}
-		//placing submarine
-		row = 0;
-		VH = rand() % 2 + 1;
-		int x6 = rand() % 4 + 1;
-		int y6 = rand() % 4 + 1;
-		int x7 = 0;
-		int y7 = 0;
-		while (x6 == x || x6 == x1 || x6 == x2 || x6 == x3 || x6 == x4 || x7 == x5 || y6 == y || y6 == y1 || y6 == y2 || y6 == y3 || y6 == y4 || y6 == y5) { // should ensure it doesnt get placed on the same tiles
-			x6 = rand() % 6 + 1;
-			y6 = rand() % 6 + 1;
-		}
-
-		if (VH == 1) { //horizontal
-			x7 = (x6 + 2);
-			y7 = y6;
-			for (int i = x6; i < x7 + 1; i++) {
-				cpu[y6][i] = 'o';
-				CPUsub[row][0] = i;
-				CPUsub[row][1] = y6;
-
-				R++;
-				row++;
-			}
-			cpu[y6][x6] = 'U';
-			cpu[y7][x7] = 'U';
-
-		}
-		else if (VH == 2) { //vertical
-			x7 = x6;
-			y7 = y6 + 2;
-			for (int i = y6; i < y7 + 1; i++) {
-				cpu[i][x6] = 'o';
-				CPUsub[row][0] = x6;
-				CPUsub[row][1] = i;
-
-				R++;
-				row++;
-			}
-			cpu[y6][x6] = 'U';
-			cpu[y7][x7] = 'U';
-
-		}
-
-		//placing destroyer
-		row = 0;
-		VH = rand() % 2 + 1;
-		int x8 = rand() % 8 + 1;
-		int y8 = rand() % 8 + 1;
-		int x9 = 0;
-		int y9 = 0;
-		while (x8 == x || x8 == x1 || x8 == x2 || x8 == x3 || x8 == x4 || x8 == x5 || x8 == x6 || x8 == x7 || y8 == y || y8 == y1 || y8 == y2 || y8 == y3 || y8 == y4 || y8 == y5 || y8 == y6 || y8 == y7) { // should ensure it doesnt get placed on the same tiles
-			x8 = rand() % 6 + 1;
-			y8 = rand() % 6 + 1;
-		}
-
-		if (VH == 1) { //horizontal
-			x9 = (x8 + 1);
-			y9 = y8;
-			for (int i = x8; i < x9 + 1; i++) {
-				cpu[y8][i] = 'o';
-				CPUdestroyer[row][0] = i;
-				CPUdestroyer[row][1] = y8;
-
-				R++;
-				row++;
-			}
-			cpu[y8][x8] = '<';
-			cpu[y9][x9] = '>';
-
-		}
-		else if (VH == 2) { //vertical
-			x9 = x8;
-			y9 = y8 + 1;
-			for (int i = y8; i < y9 + 1; i++) {
-				cpu[i][x8] = 'o';
-				CPUdestroyer[row][0] = x8;
-				CPUdestroyer[row][1] = i;
-
-				R++;
-				row++;
-			}
-			cpu[y8][x8] = '<';
-			cpu[y9][x9] = '>';
-
-		}
-
+		shiptotalmass = 0;
 		for (int i = 1; i < 10; i++) {
 			for (int j = 1; j < 10; j++) {
 				if (cpu[i][j] != '-') { shiptotalmass++; }
 			}
 		}
+		if (shiptotalmass != 9) {
+			kek = 1;
+		}
 
-		if (shiptotalmass == 17) { b = 0; }
-		if (shiptotalmass != 17) {
-			for (int i = 1; i < 10; i++) {
-				for (int j = 1; j < 10; j++) {
-					cpu[i][j] = '-';
+		else if (shiptotalmass == 9) { kek = 0; }
+	}
 
-				}
-
-			}
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			CPUtempboard[i][j] = cpu[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
 		}
 	}
+
+	//placing cruiser
+	kek = 1;
+	while (kek) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				cpu[i][j] = CPUtempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+
+		row = 0;
+		VH = rand() % 2 + 1;
+		x = rand() % 6 + 1;
+		y = rand() % 6 + 1;
+		x1 = 0;
+		y1 = 0;
+
+		if (VH == 1) { //horizontal
+			x1 = (x + 2);
+			y1 = y;
+			for (int i = x; i < x1 + 1; i++) {
+				cpu[y][i] = 'o';
+				CPUcruiser[row][0] = i;
+				CPUcruiser[row][1] = y; row++;
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x1 = x;
+			y1 = y + 2;
+			for (int i = y; i < y1 + 1; i++) {
+				cpu[i][x] = 'o';
+				CPUcruiser[row][0] = x;
+				CPUcruiser[row][1] = i; row++;
+
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+
+		shiptotalmass = 0;
+		for (int i = 1; i < 10; i++) {
+			for (int j = 1; j < 10; j++) {
+				if (cpu[i][j] != '-') { shiptotalmass++; }
+			}
+		}
+		if (shiptotalmass != 12) {
+			kek = 1;
+		}
+
+		else if (shiptotalmass == 12) { kek = 0; }
+	}
+
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			CPUtempboard[i][j] = cpu[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+		}
+	}
+
+	//placing submarine
+	kek = 1;
+	while (kek) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				cpu[i][j] = CPUtempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+
+		row = 0;
+		VH = rand() % 2 + 1;
+		x = rand() % 6 + 1;
+		y = rand() % 6 + 1;
+		x1 = 0;
+		y1 = 0;
+
+		if (VH == 1) { //horizontal
+			x1 = (x + 2);
+			y1 = y;
+			for (int i = x; i < x1 + 1; i++) {
+				cpu[y][i] = 'o';
+				CPUcruiser[row][0] = i;
+				CPUcruiser[row][1] = y; row++;
+			}
+			cpu[y][x] = 'U';
+			cpu[y1][x1] = 'U';
+
+		}
+		else if (VH == 2) { //vertical
+			x1 = x;
+			y1 = y + 2;
+			for (int i = y; i < y1 + 1; i++) {
+				cpu[i][x] = 'o';
+				CPUcruiser[row][0] = x;
+				CPUcruiser[row][1] = i; row++;
+
+			}
+			cpu[y][x] = 'U';
+			cpu[y1][x1] = 'U';
+
+		}
+
+		shiptotalmass = 0;
+		for (int i = 1; i < 10; i++) {
+			for (int j = 1; j < 10; j++) {
+				if (cpu[i][j] != '-') { shiptotalmass++; }
+			}
+		}
+		if (shiptotalmass != 15) {
+			kek = 1;
+		}
+
+		else if (shiptotalmass == 15) { kek = 0; }
+	}
+
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			CPUtempboard[i][j] = cpu[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+		}
+	}
+
+	//placing destroyer
+	kek = 1;
+	while (kek) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				cpu[i][j] = CPUtempboard[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+			}
+		}
+
+		row = 0;
+		VH = rand() % 2 + 1;
+		x = rand() % 6 + 1;
+		y = rand() % 6 + 1;
+		x1 = 0;
+		y1 = 0;
+
+		if (VH == 1) { //horizontal
+			x1 = (x + 1);
+			y1 = y;
+			for (int i = x; i < x1 + 1; i++) {
+				cpu[y][i] = 'o';
+				CPUcruiser[row][0] = i;
+				CPUcruiser[row][1] = y; row++;
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+		else if (VH == 2) { //vertical
+			x1 = x;
+			y1 = y + 1;
+			for (int i = y; i < y1 + 1; i++) {
+				cpu[i][x] = 'o';
+				CPUcruiser[row][0] = x;
+				CPUcruiser[row][1] = i; row++;
+
+			}
+			cpu[y][x] = '<';
+			cpu[y1][x1] = '>';
+
+		}
+
+		shiptotalmass = 0;
+		for (int i = 1; i < 10; i++) {
+			for (int j = 1; j < 10; j++) {
+				if (cpu[i][j] != '-') { shiptotalmass++; }
+			}
+		}
+		if (shiptotalmass != 17) {
+			kek = 1;
+		}
+
+		else if (shiptotalmass == 17) { kek = 0; }
+	}
+
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			CPUtempboard[i][j] = cpu[i][j]; //so this should hopefully save the previous state of the board, updating only the correct board. idk 
+		}
+	}
+
+
+
 	system("cls");
 	printf("*cpu ships placed*");
 	//testing - displaying coordinates of all ships, for now just carrier
 	system("pause");
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int player_order() {
@@ -1077,6 +1207,7 @@ int game(char player[10][10], char cpu[10][10], char cpudisplay[10][10], int ord
 	system("pause");
 	if (order == 1) {
 		//player goes first
+		system("cls");
 		printf("\n---------ENEMY FLEET----------");
 		show_board(cpudisplay);
 		printf("The cannons are ready! Enter the targeted coordinate! (x y): ");
