@@ -1,5 +1,26 @@
 #include "Header.h"
 
+
+
+void update_stats(Stats* stats_ptr, int status) {
+	if (status) {
+		(*stats_ptr).num_hits++;
+	}
+	else {
+		(*stats_ptr).num_misses++;
+	}
+	(*stats_ptr).total_shots++;
+}
+
+
+
+
+
+
+
+
+
+
 //makes empty board and returns it.
 char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10], char tempboard[10][10], char CPUtempboard[10][10]) {
 	printf("\nBOARD CREATED\n");

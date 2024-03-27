@@ -15,7 +15,14 @@ Description:
 #include<time.h>
 #include<stdlib.h>
 
+typedef struct stats {
+	int num_hits, num_misses, total_shots;
+	double hits_misses_ration;
+} Stats;
+
 #endif
+
+void update_stats(Stats *stats_ptr, int status); //1 means hit, 0 means miss
 
 char make_board(char player[10][10], char cpu[10][10], char cpudisplay[10][10], char tempboard[10][10], char CPUtempboard[10][10]);
 char show_board(char player[10][10]);
